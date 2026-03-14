@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  list-style-type: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: 'Mulish', sans-serif;
+}
+
+:root {
+  --background: #0F172A;
+  --card: #1E293B;
+  --primary: #6366F1;
+  --accent: #F43F5E;
+  --text: #F8FAFC;
+}

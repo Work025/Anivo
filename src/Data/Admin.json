@@ -1,0 +1,29 @@
+{
+    "admins": [
+        {
+            "adminTitle": "Super Admin",
+            "id": "anivo_admin",
+            "password": "AnivoSecure2026",
+            "securityKey": "ANIVO-MASTER-KEY-080",
+            "role": "superadmin",
+            "permissions": [
+                "add_movie",
+                "edit_movie",
+                "delete_movie",
+                "view_reports",
+                "manage_admins"
+            ]
+        },
+        {
+            "adminTitle": "Movie Uploader",
+            "id": "anivo_uploader",
+            "password": "UploaderAccess2026",
+            "securityKey": "ANIVO-UPLOAD-KEY-256",
+            "role": "uploader",
+            "permissions": [
+                "add_movie",
+                "edit_movie"
+            ]
+        }
+    ]
+}
