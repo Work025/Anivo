@@ -1,0 +1,11 @@
+{
+    "admins": [
+        {
+            "id": "admin88",
+            "password": "adminpassword",
+            "role": "Super Admin",
+            "adminTitle": "Fozilxon"
+        }
+    ],
+    "users": []
+}

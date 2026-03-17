@@ -1,0 +1,45 @@
+{
+    "characters": [
+        {
+            "id": 1,
+            "name": "Arslon",
+            "series": "Anivo Original: Qafas",
+            "role": "Bosh qahramon",
+            "description": "Jasur va aqlli yigit, o'z xalqini ozodlikka olib chiqishni maqsad qilgan.",
+            "image": "https://img.freepik.com/free-photo/anime-boy-portrait_23-2150935222.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Zuhra",
+            "series": "Anivo Original: Qafas",
+            "role": "Yordamchi qahramon",
+            "description": "Sirli kuchga ega qiz, Arslonning eng yaqin do'sti.",
+            "image": "https://img.freepik.com/free-photo/anime-girl-portrait_23-2150934988.jpg"
+        }
+    ],
+    "bts_posts": [
+        {
+            "id": 1,
+            "title": "Qafas: Birinchi kadrlar",
+            "date": "2026-03-15",
+            "excerpt": "Yangi anime loyihamizning birinchi kadrlarini ko'ring...",
+            "image": "https://img.freepik.com/free-photo/anime-concept-art_23-2151040404.jpg"
+        },
+        {
+            "id": 2,
+            "title": "Manga qanday chiziladi?",
+            "date": "2026-03-10",
+            "excerpt": "Studiyamizda manga chizish jarayoni haqida qisqacha ma'lumot.",
+            "image": "https://img.freepik.com/free-photo/anime-manga-style-character-illustration_23-2151013444.jpg"
+        }
+    ],
+    "progress": {
+        "anime_projects": [
+            { "name": "Qafas (1-qism)", "percent": 75 },
+            { "name": "Soya (Treyler)", "percent": 90 }
+        ],
+        "manga_projects": [
+            { "name": "Umid uchquni (12-bob)", "percent": 40 }
+        ]
+    }
+}

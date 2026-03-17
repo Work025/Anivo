@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, LogOut } from 'lucide-react';
+import { User, LogIn } from 'lucide-react';
 import '../Style/Header.css';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const user = localStorage.getItem('user');
         if (user) {
             setIsLoggedIn(true);
+            setUserName(JSON.parse(user).name);
         }
-    }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('user');
-        setIsLoggedIn(false);
-        navigate('/login');
-    };
+    }, [navigate]);
 
     return (
         <header className="main-header">
@@ -26,17 +22,16 @@ const Header = () => {
                 <Link to="/">ANIVO</Link>
             </div>
             <nav className="nav-menu">
+                <Link to="/" className="nav-link">Bosh sahifa</Link>
+                <Link to="/animelar" className="nav-link">Animelar</Link>
+                <Link to="/mangalar" className="nav-link">Mangalar</Link>
                 {isLoggedIn ? (
-                    <>
-                        <Link to="/" className="nav-link">Home</Link>
-                        <Link to="/admin-movie" className="nav-link">Admin Movie</Link>
-                        <button onClick={handleLogout} className="logout-btn">
-                            <LogOut size={18} /> Logout
-                        </button>
-                    </>
+                    <Link to="/profile" className="nav-link profile-link">
+                        <User size={18} /> <span className="user-name-header">{userName || 'Profil'}</span>
+                    </Link>
                 ) : (
                     <Link to="/login" className="login-btn">
-                        <LogIn size={18} /> Login
+                        <LogIn size={18} /> Kirish
                     </Link>
                 )}
             </nav>

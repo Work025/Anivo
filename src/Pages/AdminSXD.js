@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const AdminSXD = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [securityKey, setSecurityKey] = useState('');
     const [status, setStatus] = useState('');
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const navigate = useNavigate();
@@ -16,14 +17,14 @@ const AdminSXD = () => {
 
         setTimeout(() => {
             const foundAdmin = DataPassword.admins.find(
-                admin => admin.id === id && admin.password === password
+                admin => admin.id === id.trim() && admin.password === password.trim() && admin.securityKey === securityKey.trim()
             );
 
             if (foundAdmin) {
                 setStatus('✅ ACCESS GRANTED. DECRYPTING DATA...');
                 localStorage.setItem('user', JSON.stringify({ role: foundAdmin.role, name: foundAdmin.adminTitle }));
                 setTimeout(() => {
-                    navigate('/admin-movie');
+                    navigate('/admin-panel');
                 }, 1500);
             } else {
                 setStatus('❌ ACCESS DENIED. INTRUSION LOGGED.');
@@ -115,11 +116,33 @@ const AdminSXD = () => {
                     />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '12px', letterSpacing: '2px', opacity: 0.8 }}>[&gt;] SECRET_KEY</label>
+                    <label style={{ fontSize: '12px', letterSpacing: '2px', opacity: 0.8 }}>[&gt;] PASSWORD</label>
                     <input 
                         type="password" 
                         value={password} 
                         onChange={e => setPassword(e.target.value)} 
+                        disabled={isAuthenticating}
+                        style={{ 
+                            background: 'rgba(16, 185, 129, 0.05)', 
+                            border: '1px solid rgba(16, 185, 129, 0.3)', 
+                            color: '#10b981', 
+                            padding: '14px', 
+                            outline: 'none',
+                            fontFamily: 'inherit',
+                            fontSize: '15px',
+                            letterSpacing: '3px',
+                            transition: 'all 0.3s'
+                        }}
+                        onFocus={e => e.target.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.3)'}
+                        onBlur={e => e.target.style.boxShadow = 'none'}
+                    />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '12px', letterSpacing: '2px', opacity: 0.8 }}>[&gt;] SECURITY_KEY</label>
+                    <input 
+                        type="password" 
+                        value={securityKey} 
+                        onChange={e => setSecurityKey(e.target.value)} 
                         disabled={isAuthenticating}
                         style={{ 
                             background: 'rgba(16, 185, 129, 0.05)', 

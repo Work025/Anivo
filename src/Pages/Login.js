@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import DataPassword from "../Data/Admin.json";
 import DesktopBG from "../Asstes/DesktopBG.svg";
 import TableBG from "../Asstes/TableBG.svg";
 import MobileBG from "../Asstes/MobileBG.svg";
@@ -63,55 +62,80 @@ const Login = () => {
     setIsLoginView(!isLoginView);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!loginInput || !loginPassword) {
       setStatus('Iltimos barcha maydonlarni to‘ldiring');
       return;
     }
 
-    const foundAdmin = DataPassword.admins.find(
-      admin => admin.id === loginInput && admin.password === loginPassword
-    );
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ loginInput, password: loginPassword })
+      });
 
-    const storedUsers = JSON.parse(localStorage.getItem('mockUsers') || '[]');
-    const foundUser = storedUsers.find(
-      u => (u.id === loginInput || u.phone === loginInput || u.email === loginInput || u.sxdCode === loginInput) && u.password === loginPassword
-    );
+      const data = await response.json();
 
-    if (foundAdmin) {
-      setStatus(`✅ Xush kelibsiz, ${foundAdmin.adminTitle}`);
-      localStorage.setItem('user', JSON.stringify({ role: foundAdmin.role, name: foundAdmin.adminTitle }));
-      setTimeout(() => { navigate('/'); window.location.reload(); }, 1500);
-    } else if (foundUser) {
-      setStatus(`✅ Xush kelibsiz!`);
-      localStorage.setItem('user', JSON.stringify({ role: 'client', name: foundUser.name || 'SXD Foydalanuvchi' }));
-      setTimeout(() => { navigate('/'); window.location.reload(); }, 1500);
-    } else {
-      setStatus('Ma\'lumot xato yoki Bunday hisob mavjud emas');
+      if (response.ok) {
+        setStatus(`✅ Xush kelibsiz!`);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        setTimeout(() => { navigate('/'); window.location.reload(); }, 1500);
+      } else {
+        setStatus(data.message || 'Xatolik yuz berdi');
+      }
+    } catch (err) {
+      setStatus('Server bilan bog‘lanishda xatolik');
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!regName || !regSurname || !regEmail || !regPhone || !regPassword) {
       setStatus('Barcha qatorlarni to‘ldiring');
       return;
     }
 
+    // Password validation: min 5 letters and min 2 numbers
+    const lettersCount = (regPassword.match(/[a-zA-Z]/g) || []).length;
+    const numbersCount = (regPassword.match(/[0-9]/g) || []).length;
+    
+    if (lettersCount < 5 || numbersCount < 2) {
+      setStatus('Parolda kamida 5 ta harf va kamida 2 ta son bo\'lishi kerak');
+      return;
+    }
+
     const newId = 'ID-' + Math.floor(100000 + Math.random() * 900000);
-    setGeneratedId(newId);
+    
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          id: newId, 
+          name: regName, 
+          surname: regSurname, 
+          email: regEmail, 
+          phone: regPhone, 
+          password: regPassword 
+        })
+      });
 
-    const storedUsers = JSON.parse(localStorage.getItem('mockUsers') || '[]');
-    storedUsers.push({ id: newId, name: regName, surname: regSurname, email: regEmail, phone: regPhone, password: regPassword });
-    localStorage.setItem('mockUsers', JSON.stringify(storedUsers));
+      const data = await response.json();
 
-    setStatus(`Muvaffaqiyatli! ID: ${newId}`);
-
-    setTimeout(() => {
-      setLoginInput(newId);
-      setLoginPassword('');
-      setStatus('');
-      switchView();
-    }, 4000);
+      if (response.ok) {
+        setGeneratedId(newId);
+        setStatus(`Muvaffaqiyatli! ID: ${newId}`);
+        setTimeout(() => {
+          setLoginInput(newId);
+          setStatus('');
+          setIsLoginView(true);
+        }, 4000);
+      } else {
+        setStatus(data.message || 'Ro‘yxatdan o‘tishda xatolik');
+      }
+    } catch (err) {
+      setStatus('Server bilan bog‘lanishda xatolik');
+    }
   };
 
   // Google Login Hook
@@ -125,19 +149,60 @@ const Login = () => {
     onError: () => setStatus('Google orqali kirishda xatolik')
   });
 
-  // ========== 15% SXD MODAL LOGIC ==========
   const handlePhoneFormat = (e) => {
-    let input = e.target.value.replace(/\D/g, ''); // Raqam bo'lmagan narsalarni tozalash
-    if (input.length > 9) input = input.substring(0, 9); // Maksimum 9 ta raqam (O'zbekiston formati uchun: 901234567)
+    let input = e.target.value;
 
-    // (12)345-67-89 formatga o'tkazish
-    let formatted = '';
+    // Remove "+998 " from the beginning so we can process just the 9 digits
+    if (input.startsWith('+998 ')) {
+      input = input.substring(5);
+    } else if (input.startsWith('998')) {
+      input = input.substring(3);
+    }
+
+    input = input.replace(/\D/g, ''); // Remove all non-digits
+    
+    if (input.length > 9) input = input.substring(0, 9);
+
+    let formatted = '+998 ';
+    if (input.length > 0) formatted += '(' + input.substring(0, 2);
+    if (input.length >= 3) formatted += ')' + input.substring(2, 5);
+    if (input.length >= 6) formatted += '-' + input.substring(5, 7);
+    if (input.length >= 8) formatted += '-' + input.substring(7, 9);
+    
+    // If the input is completely empty after typing backspace on +998, just clear it
+    if (input.length === 0 && e.target.value.length < 5) {
+        setSxdPhone('');
+        return;
+    }
+
+    setSxdPhone(formatted);
+  };
+
+  const handleRegPhoneFormat = (e) => {
+    let input = e.target.value;
+
+    if (input.startsWith('+998 ')) {
+      input = input.substring(5);
+    } else if (input.startsWith('998')) {
+      input = input.substring(3);
+    }
+
+    input = input.replace(/\D/g, ''); 
+    
+    if (input.length > 9) input = input.substring(0, 9);
+
+    let formatted = '+998 ';
     if (input.length > 0) formatted += '(' + input.substring(0, 2);
     if (input.length >= 3) formatted += ')' + input.substring(2, 5);
     if (input.length >= 6) formatted += '-' + input.substring(5, 7);
     if (input.length >= 8) formatted += '-' + input.substring(7, 9);
 
-    setSxdPhone(formatted);
+    if (input.length === 0 && e.target.value.length < 5) {
+        setRegPhone('');
+        return;
+    }
+
+    setRegPhone(formatted);
   };
 
   const createSxdAccount = () => {
@@ -172,6 +237,11 @@ const Login = () => {
 
   return (
     <div className="login-wrapper" ref={containerRef}>
+      {/* Animated Glowing Orbs for Premium Effect */}
+      <div className="ambient-orb orb-1"></div>
+      <div className="ambient-orb orb-2"></div>
+      <div className="ambient-orb orb-3"></div>
+
       <div className="login-container">
 
         <div className='login-header-main'>
@@ -220,8 +290,8 @@ const Login = () => {
                 <p className={`status-msg ${status.startsWith('✅') ? 'success' : 'error'}`}>{status}</p>
               </div>
 
-              <p className="toggle-form-text">
-                Akkauntingiz yo'qmi? <span onClick={switchView}>Yaratish</span>
+              <p className="toggle-form-text" style={{ fontSize: '15px', marginTop: '20px' }}>
+                Akkauntingiz yo'qmi? <span onClick={switchView} style={{ color: '#F43F5E', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}>Yangi hisob yaratish</span>
               </p>
 
               <div className='divider'>
@@ -278,12 +348,12 @@ const Login = () => {
 
               <div className='input-group'>
                 <i className="fa-solid fa-phone input-icon"></i>
-                <input
-                  type='tel'
-                  placeholder="Telefon raqami"
-                  value={regPhone}
-                  onChange={(e) => setRegPhone(e.target.value)}
-                />
+                  <input
+                    type='tel'
+                    placeholder="+998 (__)___-__-__"
+                    value={regPhone}
+                    onChange={handleRegPhoneFormat}
+                  />
               </div>
 
               <div className='input-group'>
@@ -300,7 +370,7 @@ const Login = () => {
               </div>
 
               <div className='login-actions'>
-                <button className='main-login-btn' onClick={handleRegister}>Id Olish</button>
+                <button className='main-login-btn' onClick={handleRegister}>ID Olish</button>
                 <p className={`status-msg ${status.startsWith('✅') ? 'success' : 'error'}`}>{status}</p>
               </div>
 
@@ -324,7 +394,7 @@ const Login = () => {
               <div style={{ textAlign: 'center', marginBottom: '15px' }}>
                 <i className="fa-solid fa-key" style={{ fontSize: '36px', color: '#F43F5E' }}></i>
               </div>
-              <h3 style={{ color: '#F43F5E' }}>SXD HISOZBI</h3>
+              <h3 style={{ color: '#F43F5E' }}>SXD HISOBI</h3>
               <p>Siz bizning <b>15% lik</b> hisob kirishidasiz. Raqamingizni tasdiqlang.</p>
 
               {sxdGeneratedCode ? (
@@ -338,7 +408,7 @@ const Login = () => {
                     <i className="fa-solid fa-phone input-icon"></i>
                     <input
                       type='text'
-                      placeholder="(12)345-67-89"
+                      placeholder="+998 (__)___-__-__"
                       value={sxdPhone}
                       onChange={handlePhoneFormat}
                     />
@@ -352,7 +422,7 @@ const Login = () => {
                       onChange={(e) => setSxdPassword(e.target.value)}
                     />
                   </div>
-                  <button className='main-login-btn' style={{ background: '#F43F5E', color: 'white' }} onClick={createSxdAccount}>
+                  <button className='main-login-btn sxd-btn' onClick={createSxdAccount}>
                     SXD Kod Yaratish
                   </button>
                 </div>

@@ -2,8 +2,14 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
-import Adminmovie from './Pages/Adminmovie';
 import AdminSXD from './Pages/AdminSXD';
+import Adminpanel from './Pages/Adminpanel';
+
+import AnimeWatch from './Pages/AnimeWatch';
+import MangaRead from './Pages/MangaRead';
+import Profile from './Pages/Profile';
+import AllAnime from './Pages/AllAnime';
+import AllManga from './Pages/AllManga';
 
 function App() {
   return (
@@ -12,8 +18,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin-movie" element={<Adminmovie />} />
-          <Route path="/AdminCodSXD88" element={<AdminSXD />} />
+          <Route path="/anime/:id" element={<AnimeWatch />} />
+          <Route path="/manga/:id" element={<MangaRead />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/animelar" element={<AllAnime />} />
+          <Route path="/mangalar" element={<AllManga />} />
         </Routes>
       </div>
     </Router>

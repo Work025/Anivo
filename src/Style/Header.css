@@ -79,9 +79,20 @@
 
 @media (max-width: 768px) {
     .main-header {
+        position: fixed;
+        bottom: 70px; /* Above BottomNav */
+        top: auto;
         padding: 0 20px;
+        height: 60px;
+        background: rgba(15, 23, 42, 0.9);
+        border-bottom: none;
+        border-top: 1px solid rgba(99, 102, 241, 0.2);
+        justify-content: center;
     }
-    .nav-link {
-        display: none;
+    .logo a {
+        font-size: 20px;
+    }
+    .nav-menu, .nav-link, .login-btn, .logout-btn, .user-name-header {
+        display: none !important;
     }
 }

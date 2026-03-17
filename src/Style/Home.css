@@ -1,31 +1,304 @@
+:root {
+    --primary: #6366f1;
+    --accent: #818cf8;
+    --background: #030712;
+    --card-bg: rgba(30, 41, 59, 0.5);
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
 .home-container {
-  background: var(--background);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
 }
 
-h1 {
-  margin-bottom: 20px;
+.home-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 40px;
 }
 
-nav {
-  display: flex;
-  gap: 20px;
+.hero-section {
+    text-align: center;
+    margin-bottom: 80px;
+    animation: fadeIn 1s ease-out;
 }
 
-nav a {
-  background: var(--primary);
-  color: var(--text);
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
+.hero-section h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    line-height: 1.1;
 }
 
-nav a:hover {
-  background: var(--accent);
+.highlight {
+    color: var(--primary);
+    position: relative;
+    display: inline-block;
 }
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(99, 102, 241, 0.2);
+    z-index: -1;
+}
+
+.hero-section p {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.content-section {
+    margin-bottom: 80px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.section-header .line {
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    flex-grow: 1;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.content-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+}
+
+.content-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.content-card:hover .card-image img {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(3, 7, 18, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.content-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.play-btn, .read-btn {
+    padding: 12px 30px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: transform 0.2s ease;
+}
+
+.play-icon {
+    font-size: 1.5rem;
+}
+
+.play-btn:hover, .read-btn:hover {
+    transform: scale(1.1);
+}
+
+.card-year {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(3, 7, 18, 0.8);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.card-info {
+    padding: 20px;
+}
+
+.card-info h3 {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    margin-bottom: 6px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Studio Progress Section */
+.studio-progress-section {
+    padding: 60px 5%;
+}
+
+.progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.progress-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    transition: width 1s ease-in-out;
+}
+
+.percent {
+    font-size: 14px;
+    font-weight: bold;
+    color: #818cf8;
+    align-self: flex-end;
+}
+
+/* BTS Grid */
+.bts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.bts-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bts-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.bts-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.bts-info {
+    padding: 20px;
+}
+
+.bts-info h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.bts-info p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.bts-info .date {
+    font-size: 12px;
+    color: #6366f1;
+}
+
+@media (max-width: 768px) {
+    .home-main { padding: 30px 16px; }
+    .hero-section { margin-bottom: 40px; }
+    .hero-section h1 { margin-bottom: 12px; }
+    .section-header { margin-bottom: 24px; }
+    .section-header h2 { font-size: 1.5rem; }
+    .content-section { margin-bottom: 50px; }
+    .studio-progress-section { padding: 40px 16px; }
+    .progress-card { padding: 16px; }
+    .card-info { padding: 12px; }
+    .play-btn, .read-btn { padding: 8px 20px; font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .card-image { aspect-ratio: 11 / 16; }
+    .card-year { top: 8px; right: 8px; font-size: 10px; padding: 2px 8px; }
+}
+

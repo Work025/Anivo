@@ -28,7 +28,6 @@ label {
 }
 
 input {
-  margin-bottom: 20px;
   padding: 10px;
   background: var(--background);
   color: var(--text);
