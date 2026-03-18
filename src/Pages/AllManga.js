@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
 import BottomNav from '../Components/BottomNav';
-import MangaData from '../Data/Manga.json';
+import API_URL from '../apiConfig';
 import '../Style/Home.css'; // Reusing grid styles
 
 const AllManga = () => {
@@ -11,9 +11,9 @@ const AllManga = () => {
     useEffect(() => {
         const fetchManga = async () => {
             try {
-                const res = await fetch('http://127.0.0.1:5000/api/manga');
-                const data = await res.json();
-                setMangaList(data);
+                const response = await fetch(`${API_URL}/api/manga`);
+                const result = await response.json();
+                if (result.success) setMangaList(result.data);
             } catch (err) {
                 console.error('Manga fetch error:', err);
             }

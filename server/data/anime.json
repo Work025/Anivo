@@ -6,6 +6,7 @@
         "year": "2026",
         "description": "Studiyamizning birinchi original anime filmi treyleri.",
         "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        "thumbnail": "/images/Anime1.png"
+        "thumbnail": "/images/Anime1.png",
+        "access": "free"
     }
 ]

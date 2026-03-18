@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
 import BottomNav from '../Components/BottomNav';
-import AnimeData from '../Data/Anime.json';
+import API_URL from '../apiConfig';
 import '../Style/Home.css'; // Reusing grid styles
 
 const AllAnime = () => {
@@ -11,9 +11,9 @@ const AllAnime = () => {
     useEffect(() => {
         const fetchAnime = async () => {
             try {
-                const res = await fetch('http://127.0.0.1:5000/api/anime');
-                const data = await res.json();
-                setAnimeList(data);
+                const response = await fetch(`${API_URL}/api/anime`);
+                const result = await response.json();
+                if (result.success) setAnimeList(result.data);
             } catch (err) {
                 console.error('Anime fetch error:', err);
             }

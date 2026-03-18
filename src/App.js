@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import AdminSXD from './Pages/AdminSXD';
@@ -23,6 +23,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/animelar" element={<AllAnime />} />
           <Route path="/mangalar" element={<AllManga />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </Router>
