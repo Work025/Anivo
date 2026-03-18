@@ -12,6 +12,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("📡 Hozirgi API manzili:", API_URL);
         const fetchContent = async () => {
             try {
                 const [animeRes, mangaRes, wikiRes] = await Promise.all([
@@ -19,6 +20,8 @@ const Home = () => {
                     fetch(`${API_URL}/api/manga`),
                     fetch(`${API_URL}/api/wiki`)
                 ]);
+                
+                if (!animeRes.ok || !mangaRes.ok) throw new Error("Server xatosi");
 
                 const animeResult = await animeRes.json();
                 const mangaResult = await mangaRes.json();
@@ -39,15 +42,18 @@ const Home = () => {
 
     if (loading) return <div className="loading">Yuklanmoqda...</div>;
     if (!wikiData) return (
-        <div className="error-container" style={{ textAlign: 'center', padding: '50px 20px', color: '#fff' }}>
-            <h2 style={{ color: '#F43F5E' }}>Server bilan aloqa yo‘q</h2>
-            <p>Iltimos, keyinroq qayta urinib ko‘ring yoki server ishlayotganiga ishonch hosil qiling.</p>
-            <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }}>
+        <div className="error-container" style={{ textAlign: 'center', padding: '100px 20px', color: '#fff' }}>
+            <h2 style={{ color: '#F43F5E' }}>Server bilan bog'lanib bo'lmadi</h2>
+            <p>Internet ulanishini tekshiring yoki keyinroq qayta urinib ko'ring.</p>
+            <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', maxWidth: '500px', margin: '20px auto' }}>
                 <p style={{ fontSize: '14px', marginBottom: '10px' }}>Texnik ma'lumot:</p>
-                <code>Backend ishlamayapti yoki server o‘chgan.</code>
-                <br />
-                <code style={{ display: 'block', marginTop: '10px', color: '#10B981' }}>Terminalda: npm run dev</code>
+                <code>Backend ulanishi rad etildi yoki server kutish rejimida.</code>
+                <br/>
+                <code style={{fontSize: '11px', opacity: 0.7}}>{API_URL}</code>
             </div>
+            <button onClick={() => window.location.reload()} style={{ marginTop: '20px', padding: '10px 20px', background: '#F43F5E', border: 'none', borderRadius: '5px', color: '#fff', cursor: 'pointer' }}>
+                Qayta yuklash
+            </button>
         </div>
     );
 
