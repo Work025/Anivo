@@ -4,6 +4,7 @@ import Header from '../Components/Header';
 import BottomNav from '../Components/BottomNav';
 import API_URL from '../apiConfig';
 import '../Style/Home.css'; // Reusing grid styles
+// import MangaData from '../Data/Manga.json';
 
 const AllManga = () => {
     const [mangaList, setMangaList] = useState([]);

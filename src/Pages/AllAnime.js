@@ -4,6 +4,7 @@ import Header from '../Components/Header';
 import BottomNav from '../Components/BottomNav';
 import API_URL from '../apiConfig';
 import '../Style/Home.css'; // Reusing grid styles
+// import AnimeData from '../Data/Anime.json'; 
 
 const AllAnime = () => {
     const [animeList, setAnimeList] = useState([]);
