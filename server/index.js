@@ -34,7 +34,13 @@ const authLimiter = rateLimit({
 });
 
 app.use(cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://anivo-plcnu0k7z-fozilxons-projects.vercel.app"],
+    origin: [
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000", 
+        "https://anivo.vercel.app",
+        "https://anivo-plcnu0k7z-fozilxons-projects.vercel.app",
+        "https://anivo-git-main-fozilxons-projects.vercel.app"
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
